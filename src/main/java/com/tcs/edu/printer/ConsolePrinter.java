@@ -1,5 +1,7 @@
+package com.tcs.edu.printer;
+
 /**
- *  Класс ConsolePrinter печатает данные в консоль.
+ *  Класс com.tcs.edu.printer.ConsolePrinter печатает данные в консоль.
  *  @autor Алтухов Александр
  *
  */
