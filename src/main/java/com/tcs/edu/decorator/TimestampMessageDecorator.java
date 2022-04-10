@@ -3,7 +3,7 @@ package com.tcs.edu.decorator;
 import java.time.Instant;
 
 public class TimestampMessageDecorator {
-    public static final int PAGE_SIZE = 3;
+    public static final int PAGE_SIZE = 2;
     public static int messageCount = 0;
 
     public static String decorate(String message) {
