@@ -7,7 +7,9 @@ import static com.tcs.edu.decorator.TimestampMessageDecorator.messageCount;
 
 class Application {
     public static void main(String[] args) {
-        String textFormat = String.format("%d %s",messageCount, decorate(" Hello world!"));
-        System.out.println(textFormat);
+        System.out.println(String.format("%d %s", messageCount, decorate(" Hello world!")));
+        System.out.println(String.format("%d %s", messageCount, decorate(" Hello world!")));
+        System.out.println(String.format("%d %s", messageCount, decorate(" Hello world!")));
+        System.out.println(String.format("%d %s", messageCount, decorate(" Hello world!")));
     }
 }
