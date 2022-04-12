@@ -2,18 +2,17 @@ package com.tcs.edu.decorator;
 
 import java.time.Instant;
 
+import static java.lang.String.format;
+
 public class TimestampMessageDecorator {
-    public static final int PAGE_SIZE = 3;
-    public static int messageCount = 0;
+    public static final int PAGE_SIZE = 2;
+    public static int messageCount;
 
     public static String decorate(String message) {
-        final var decoratedMessage = Instant.now() + message;
-        if (messageCount % PAGE_SIZE != 0) {
-            messageCount++;
-            return decoratedMessage;
+        if (++messageCount % PAGE_SIZE == 0) {
+            return format("%d %s %s %n---", messageCount, Instant.now().toString(), message);
         } else {
-            messageCount++;
-            return decoratedMessage + "\n ---";
+            return format("%d %s %s", messageCount, Instant.now().toString(), message);
         }
     }
 }
