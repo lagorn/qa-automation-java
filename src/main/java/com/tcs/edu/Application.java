@@ -5,7 +5,7 @@ import static com.tcs.edu.decorator.Severity.*;
 
 class Application {
     public static void main(String[] args) {
-        gluingPrint(MINOR, "Hello world!");
+        gluingPrint(MINOR, "Hello world!","Hello Piter!","Hello John!");
         gluingPrint(MAJOR, "Hello world!");
         gluingPrint(REGULAR, "Hello world!");
         gluingPrint(MINOR, "Hello world!");
