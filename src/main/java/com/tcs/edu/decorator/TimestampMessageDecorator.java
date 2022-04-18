@@ -8,12 +8,12 @@ public class TimestampMessageDecorator {
     public static final int PAGE_SIZE = 2;
     public static int messageCount;
 
-    public static String decorate(String message, String status) {
+    public static String decorate(String message) {
 
         if (++messageCount % PAGE_SIZE == 0) {
-            return format("%d %s %s %s %n---", messageCount, Instant.now().toString(), message, status);
+            return format("%d %s %s %n---", messageCount, Instant.now().toString(), message);
         } else {
-            return format("%d %s %s %s", messageCount, Instant.now().toString(), message, status);
+            return format("%d %s %s", messageCount, Instant.now().toString(), message);
         }
     }
 }
