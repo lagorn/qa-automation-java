@@ -5,13 +5,13 @@ public class SeverityDecorator {
         String status = null;
         switch (severity) {
             case MINOR:
-                status = "()";
+                status = " ()";
                 break;
             case REGULAR:
-                status = "(!)";
+                status = " (!)";
                 break;
             case MAJOR:
-                status = "(!!!)";
+                status = " (!!!)";
                 break;
         }
         return status;
