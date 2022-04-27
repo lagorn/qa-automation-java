@@ -5,8 +5,10 @@ import com.tcs.edu.decorator.Doubling;
 import com.tcs.edu.decorator.MessageOrder;
 import com.tcs.edu.decorator.Severity;
 
-import java.util.Objects;
+import java.util.*;
 
+import static com.tcs.edu.decorator.Doubling.*;
+import static com.tcs.edu.decorator.MessageOrder.*;
 import static com.tcs.edu.decorator.SeverityDecorator.addLevelDecorator;
 import static com.tcs.edu.decorator.TimestampMessageDecorator.decorate;
 import static com.tcs.edu.printer.ConsolePrinter.print;
@@ -14,91 +16,55 @@ import static com.tcs.edu.printer.ConsolePrinter.print;
 public class MessageService {
     public static int messageCount;
 
-    public static void gluingPrint(Severity severity, String message, String... messages) {
+    public static void log(Severity severity, String message, String... messages) {
 
-        if ((message != null) && (Objects.nonNull(severity))) {
+        if (severity == null) return;
+
+        if (message != null) {
             print(decorate(message + addLevelDecorator(severity)));
+        }
 
-            for (String mes : messages) {
-                if (mes != null) {
-                    print(decorate(mes + addLevelDecorator(severity)));
-                }
+        for (String mes : messages) {
+            if (mes != null) {
+                print(decorate(mes + addLevelDecorator(severity)));
             }
         }
     }
 
-    public static void gluingPrint(Severity severity, MessageOrder messageOrder, String message, String... messages) {
+    public static void log(Severity severity, MessageOrder messageOrder, String message, String... messages) {
 
-        if ((message != null) && (Objects.nonNull(severity)) && (messageOrder != null)) {
-            if (messageOrder == MessageOrder.ASR) {
-                messageCount = 1;
-                print(decorate(message + " " + messageCount++ + addLevelDecorator(severity)));
+        if (messageOrder == null) return;
 
-                for (int i = 0; i < messages.length; i++, messageCount++) {
-                    if (messages[i] != null) {
-                        print(decorate(messages[i] + " " + messageCount + addLevelDecorator(severity)));
-                    }
-                }
-            } else {
-                messageCount = messages.length + 1;
-                print(decorate(message + " " + messageCount-- + addLevelDecorator(severity)));
+        if (messageOrder == ASC) log(severity, message, messages);
 
-                for (int i = messages.length - 1; i >= 0; i--, messageCount--) {
-                    if (messages[i] != null) {
-                        print(decorate(messages[i] + " " + messageCount + addLevelDecorator(severity)));
-                    }
-                }
-            }
-        }
-    }
-
-    public static void gluingPrint(Severity severity, Doubling doubling, MessageOrder messageOrder, String message, String... messages) {
-        if (doubling == Doubling.DOUBLES) {
-            gluingPrint(severity, messageOrder, message, messages);
-        } else {
-
+        if (messageOrder == DESC) {
             String[] arrayMessage = new String[messages.length + 1];
 
-            if ((message != null) && (Objects.nonNull(severity)) && (messageOrder != null)) {
-                if (messageOrder == MessageOrder.ASR) {
-                    messageCount = 1;
-                    print(decorate(message + " " + messageCount++ + addLevelDecorator(severity)));
-                    arrayMessage[0] = message;
-
-                    for (int i = 0; i < messages.length; i++, messageCount++) {
-                        if (messages[i] != null) {
-                            for (int j = 1; j < arrayMessage.length; j++) {
-                                if (!duplicateSearch(messages[i], arrayMessage)) {
-                                    print(decorate(messages[i] + " " + messageCount + addLevelDecorator(severity)));
-                                    arrayMessage[j] = messages[i];
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    messageCount = messages.length + 1;
-                    print(decorate(message + " " + messageCount-- + addLevelDecorator(severity)));
-                    arrayMessage[0] = message;
-
-                    for (int i = messages.length - 1; i >= 0; i--, messageCount--) {
-                        for (int j = 1; j < arrayMessage.length; j++) {
-                            if (!duplicateSearch(messages[i], arrayMessage)) {
-                                print(decorate(messages[i] + " " + messageCount + addLevelDecorator(severity)));
-                                arrayMessage[j] = messages[i];
-                            }
-                        }
-                    }
-                }
+            for (int i = 0, j = messages.length - 1; i < arrayMessage.length - 1; i++, j--) {
+                arrayMessage[i] = messages[j];
             }
+            arrayMessage[arrayMessage.length - 1] = message;
+
+            log(severity, null, arrayMessage);
         }
     }
 
-    private static boolean duplicateSearch(String message, String... messages) {
-        for (String checkedMessage : messages) {
-            if (Objects.equals(message, checkedMessage)) {
-                return true;
+    public static void log(Severity severity, MessageOrder messageOrder, Doubling doubling, String message, String... messages) {
+        if (doubling == null) return;
+
+        if (doubling == DOUBLES) {
+            log(severity, messageOrder, message, messages);
+        } else if (doubling == DISTINCT) {
+
+            String[] arrayMessage = new String[messages.length + 1];
+            arrayMessage[0] = message;
+
+            for (int i = 0, j = 1; i < messages.length; i++, j++) {
+                arrayMessage[j] = messages[i];
             }
+
+            HashSet<String> collectionMessage = new LinkedHashSet<>(Arrays.asList(arrayMessage));
+            log(severity, messageOrder, null, collectionMessage.toArray(new String[0]));
         }
-        return false;
     }
 }
