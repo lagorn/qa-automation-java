@@ -14,7 +14,6 @@ import static com.tcs.edu.decorator.TimestampMessageDecorator.decorate;
 import static com.tcs.edu.printer.ConsolePrinter.print;
 
 public class MessageService {
-    public static int messageCount;
 
     public static void log(Severity severity, String message, String... messages) {
 
