@@ -41,4 +41,12 @@ public class Message {
     public int hashCode() {
         return Objects.hash(body);
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "body='" + body + '\'' +
+                ", severity=" + severity +
+                '}';
+    }
 }
