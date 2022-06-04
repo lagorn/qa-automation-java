@@ -3,8 +3,8 @@ package com.tcs.edu.decorator;
 import com.tcs.edu.abs.MessageDecorator;
 import com.tcs.edu.abs.MessageService;
 import com.tcs.edu.abs.Printer;
+import com.tcs.edu.abs.ValidatedService;
 import com.tcs.edu.domain.Message;
-import com.tcs.edu.printer.ConsolePrinter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +16,7 @@ import static com.tcs.edu.decorator.MessageOrder.ASC;
 import static com.tcs.edu.decorator.MessageOrder.DESC;
 import static com.tcs.edu.decorator.SeverityDecorator.addLevelDecorator;
 
-public class OrderedDistinctedMessageService implements MessageService {
+public class OrderedDistinctedMessageService extends ValidatedService implements MessageService {
 
     private Printer printer;
     private MessageDecorator messageDecorator;
@@ -26,16 +26,16 @@ public class OrderedDistinctedMessageService implements MessageService {
         this.messageDecorator = messageDecorator;
     }
 
-    public void log(Message message, Message... messages){
+    public void log(Message message, Message... messages) {
 
         if (message == null) return;
 
-        if ((message.getBody() != null) && (message.getSeverity() != null)) {
+        if (super.isArgsValid(message)) {
             printer.print(messageDecorator.decorate(message.getBody() + addLevelDecorator(message.getSeverity())));
         }
 
         for (Message mes : messages) {
-            if ((mes.getBody() != null) && (mes.getSeverity() != null)) {
+            if (super.isArgsValid(mes)) {
                 printer.print(messageDecorator.decorate(mes.getBody() + addLevelDecorator(mes.getSeverity())));
             }
         }
@@ -64,7 +64,7 @@ public class OrderedDistinctedMessageService implements MessageService {
             log(messageOrder, message, messages);
         } else if (doubling == DISTINCT) {
 
-            ArrayList <Message> reverseList = new ArrayList<>(List.of(messages));
+            ArrayList<Message> reverseList = new ArrayList<>(List.of(messages));
             Collections.reverse(reverseList);
             reverseList.add(message);
 
